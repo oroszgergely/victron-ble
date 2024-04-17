@@ -111,6 +111,9 @@ class DcEnergyMeter(Device):
             # Starter voltage is treated as signed
             parsed["starter_voltage"] = BitReader.to_signed_int(aux, 16) / 100
         elif aux_mode == AuxMode.TEMPERATURE.value:
-            parsed["temperature_kelvin"] = aux / 100
+            if aux == 0xFFFF:
+                parsed["temperature_kelvin"] = None
+            else:
+                parsed["temperature_kelvin"] = aux / 100
 
         return parsed
